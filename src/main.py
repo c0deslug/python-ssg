@@ -15,25 +15,6 @@ def get_public_dirpath(script_path):
     directory = os.path.dirname(script_path)
     return os.path.join(directory, 'public')
 
-def copy_folder_to_public(static_dir_path, public_dir_path):
-
-    folder_content = os.listdir(static_dir_path)
-    print("Content of folder:")
-    print(folder_content)
-    # Got list of files/folders, check if file copy it, if dir call copy_folder_to_public
-    for item in folder_content:
-        item_path = os.path.join(static_dir_path, item)
-        print (f"Item path is {item_path}")
-        if os.path.isfile(item_path) is True:
-            print(f"Copying {item} to public folder.")
-            shutil.copy(item_path, public_dir_path)
-        else:
-            print ("Item is folder, invoking folder copy on it.")
-            pubsub = os.path.join(public_dir_path, item) # public subfolder
-            os.mkdir(pubsub) # needs to be in the public path so replace static location with public first
-            copy_folder_to_public(item_path, pubsub)
-
-
 
 
 def main():
@@ -57,10 +38,10 @@ def main():
     copy_folder_to_public(static_dir_path, public_dir_path)
 
     print("Generating page...")
-    generate_page(
-        os.path.join(content_dir_path, "index.md"),
+    generate_page_recursive(
+        content_dir_path,
         template_path,
-        os.path.join(public_dir_path, "index.html"),
+        public_dir_path
     )
 
     #os.path.relpath(get_script_dir())
