@@ -14,12 +14,15 @@ def markdown_to_html_node(markdown):
 def markdown_to_blocks(markdown):
     markdown = markdown.strip()
     blocks = markdown.split("\n\n")
-
+    filtered_blocks = []
     for block in blocks:
-        if len(block) == 0:
-            blocks.remove(blocks)
+        if block == "":
+            continue
+        block = block.strip()
+        filtered_blocks.append(block)
     
     return blocks
+
 
 class BlockType(Enum):
     CODE = "code"
@@ -138,3 +141,30 @@ def block_to_block_type(block):
         return BlockType.ORDERED_LIST
 
     return BlockType.PARAGRAPH
+
+
+"""
+testing something
+
+def block_to_block_type(block):
+    block = block.strip()
+    lines = block.split("\n")
+
+    if block.startswith(("#", "## ", "### ", "#### ", "##### ", "###### ")):
+        return BlockType.HEADING
+
+    if block.startswith("```") and block.endswith("```"):
+        return BlockType.CODE
+    
+    if all(line.startswith(">") for line in lines):
+        return BlockType.QUOTE
+    
+    if all(line.startswith("- ") for line in lines):
+        return BlockType.UNORDERED_LIST
+        
+    if all(line.startswith(f"{i+1}. ") for i, line in enumerate(lines)):
+        return BlockType.ORDERED_LIST
+
+    return BlockType.PARAGRAPH
+
+"""

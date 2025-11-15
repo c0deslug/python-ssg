@@ -26,7 +26,7 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, None, props)
 
     def to_html(self):
-        if not self.value:
+        if self.value is None:
             raise ValueError("invalid HTML: no value")
         if self.tag is None:
             return self.value
@@ -60,6 +60,52 @@ class ParentNode(HTMLNode):
 
         
     def __repr__(self):
-        return f"ParentNoide({self.tag}, {self.children}, {self.props})"
+        return f"ParentNode({self.tag}, {self.children}, {self.props})"
 
 
+"""
+boot.dev solution
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if self.tag is None:
+            raise ValueError("invalid HTML: no tag")
+        if self.children is None:
+            raise ValueError("invalid HTML: no children")
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
+        return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
+
+    def __repr__(self):
+        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
+
+my solution
+
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+    
+    def to_html(self):
+        leaf_html = ""
+        if not self.tag:
+            raise ValueError("invalid HTML: no tag")
+        if self.children is None:
+            raise ValueError("invalid HTML: no children")
+        #children_html = ""
+        #for child in self.children:
+        #    children_html += child.to_html()
+        #return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
+        
+        if len(self.children) > 1: # isinstance(self.children, list): 
+            for item in self.children[1:]: # grabs everything but the first leaf, that will be taken care of by the return function
+                leaf_html += f"{item.to_html()}"    
+        return (f"<{self.tag}{self.props_to_html()}>{self.children[0].to_html()}{leaf_html}</{self.tag}>")
+
+        
+    def __repr__(self):
+        return f"ParentNode({self.tag}, {self.children}, {self.props})"
+
+
+"""

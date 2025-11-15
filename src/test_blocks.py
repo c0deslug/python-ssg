@@ -1,6 +1,6 @@
 import unittest
 from block_markdown import *
-
+from gencontent import *
 
 class TestInlineMarkdown(unittest.TestCase):
 
@@ -104,6 +104,21 @@ the **same** even with inline stuff
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
 
+    def test_extracttitle(self):
+        md = """
+
+# Hello world
+
+This is some generic filler text
+
+
+"""
+
+        ext_title = extract_title(md)
+        self.assertEqual(
+            ext_title,
+            "Hello world",
+        )
 
 
 if __name__ == "__main__":
