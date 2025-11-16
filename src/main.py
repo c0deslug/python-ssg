@@ -3,6 +3,7 @@ from block_markdown import *
 from gencontent import *
 import inspect
 import os, shutil
+import sys
 
 def get_source_dir():
     return os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -18,17 +19,24 @@ def get_public_dirpath(script_path):
 
 
 def main():
-    #TN_Object = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    #print(TN_Object)
 
-    script_path = get_source_dir()
-    static_dir_path = get_static_dirpath(script_path)
-    public_dir_path = get_public_dirpath(script_path)
+
+    #script_path = get_source_dir()
+    #static_dir_path = get_static_dirpath(script_path)
+    #public_dir_path = get_public_dirpath(script_path)
+    static_dir_path = "./static" 
+    public_dir_path = "./docs"
     content_dir_path = "./content"
     template_path = "./template.html"
+    default_basepath = "/"
 
-    print(static_dir_path)
-    print(public_dir_path)
+    # used for testing
+    # print(static_dir_path)
+    # print(public_dir_path)
+
+    basepath = default_basepath
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
 
     shutil.rmtree(public_dir_path)
     print("Deleted public folder contents to prepare for copying, creating a new one...")
@@ -41,10 +49,9 @@ def main():
     generate_page_recursive(
         content_dir_path,
         template_path,
-        public_dir_path
+        public_dir_path,
+        basepath
     )
-
-    #os.path.relpath(get_script_dir())
 
 
 main()
